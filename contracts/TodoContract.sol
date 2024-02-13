@@ -1,5 +1,5 @@
-//SPDX License-Identifier: MIT
-pragma solidity 0.8.19;
+// SPDX-License-Identifier: MIT
+pragma solidity *0.8.9;
 
 contract TodoContract{
 
@@ -13,10 +13,10 @@ contract TodoContract{
     enum Status{done, pending, started}
 
     // mapping the various status to the bool status of the struct
-    mapping(Status => Todo.status) mappedStatus;
+    mapping(Status => Todo) mappedStatus;
 
     // creating an array to hold the to-do lists
-    Todo[] todoLists;
+       Todo[] todoLists;
 
     function createTodo(string memory _title, string memory _desc, string memory _status) public {
         uint256 todoId = todoLists.length;
@@ -25,16 +25,21 @@ contract TodoContract{
         
     }
 
-    function updateTodoList(uint256 _id, string memory _title, string memory _desc, string memory _status) public returns(string memory, string memory, string memory){
+    function updateTodoList(uint256 _id, string memory _title, string memory _desc, string memory _status) public returns(Todo memory){
         require(_id < todoLists.length, "");
         todoLists[_id].title = _title;
         todoLists[_id].description = _desc;
         todoLists[_id].status = _status;
-        // return (todoId, Todo.title, Todo.description, Todo.status);
+        return todoLists[_id];
     }
 
-    function updateTodoStatus() public{
-        
+    function updateStatus(uint256 _id, string memory _status) public returns(Todo memory){
+        //to update the status of a todo, 
+        // select the todo by its unique identifier
+        require(_id < todoLists.length, "");
+        // require(_status == mappedStatus, "");
+            todoLists[_id].status = _status;
+            return todoLists[_id];      
     }
 
     function deleteTodoList() public {
